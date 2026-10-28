@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>LITETUBE CARTOON</title>
+<!-- Sirf logo/chips ke letters ka font (~2KB), baaki system font = 0 data -->
+<link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap&text=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%20!%3F~.%25%2B-" rel="stylesheet">
+<style>
+:root{--bg:#ffe45e;--ink:#1a1a2e;--pink:#ff5d8f;--blue:#4cc9f0;--green:#7bf1a8;--purple:#b388ff;--orange:#ff9f43;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Trebuchet MS','Segoe UI',system-ui,sans-serif;}
+body{color:var(--ink);background-color:var(--bg);background-image:radial-gradient(rgba(26,26,46,.13) 2px,transparent 2.5px);background-size:22px 22px;min-height:100vh;overflow-x:hidden;}
+.bang,.logo,.actions button,.chip,.loading,.ticker span,#bhatiIntro span,.pow,.playbig{font-family:Bangers,Impact,'Arial Black',sans-serif;letter-spacing:2px;text-transform:uppercase;}
+
+/* INTRO */
+#bhatiIntro{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:var(--pink);z-index:9999;overflow:hidden;animation:hideIntro 1.7s forwards;}
+#bhatiIntro::before{content:"";position:absolute;inset:-60%;background:repeating-conic-gradient(#ff5d8f 0 12deg,#ffb3cb 12deg 24deg);animation:spin 5s linear infinite;}
+#bhatiIntro span{position:relative;font-size:clamp(60px,20vw,160px);color:#fff;-webkit-text-stroke:5px var(--ink);text-shadow:8px 8px 0 var(--ink);animation:pop .8s cubic-bezier(.3,1.8,.5,1);}
+@keyframes pop{0%{transform:scale(0) rotate(-25deg);}100%{transform:scale(1) rotate(-5deg);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes hideIntro{0%,78%{opacity:1;}100%{opacity:0;visibility:hidden;}}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:100;background:#fff;padding:0 14px;height:66px;display:flex;align-items:center;gap:14px;border-bottom:4px solid var(--ink);box-shadow:0 5px 0 var(--ink);}
+.logo{font-size:32px;color:var(--pink);cursor:pointer;-webkit-text-stroke:1.5px var(--ink);text-shadow:3px 3px 0 var(--ink);white-space:nowrap;animation:wiggle 2.4s ease-in-out infinite;}
+@keyframes wiggle{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg) scale(1.06);}}
+.search{flex:1;display:flex;max-width:640px;margin:0 auto;background:#fff;border:4px solid var(--ink);border-radius:40px;overflow:hidden;height:44px;box-shadow:4px 4px 0 var(--ink);}
+.search input{flex:1;min-width:0;padding:0 14px;background:none;border:0;outline:none;color:var(--ink);font-size:16px;font-weight:700;}
+.search button{width:62px;border:0;border-left:4px solid var(--ink);background:var(--blue);cursor:pointer;font-size:20px;transition:.15s;}
+.search button:hover{background:var(--green);}
+
+/* TICKER */
+.ticker{background:var(--ink);color:var(--bg);overflow:hidden;white-space:nowrap;border-bottom:4px solid var(--ink);}
+.ticker span{display:inline-block;padding:5px 0;font-size:18px;animation:tick 22s linear infinite;}
+@keyframes tick{to{transform:translateX(-50%);}}
+
+/* CHIPS */
+.actions{display:flex;gap:12px;padding:14px 16px;overflow-x:auto;align-items:center;scrollbar-width:none;}
+.actions button,.chip{background:#fff;color:var(--ink);border:3px solid var(--ink);padding:7px 18px;border-radius:30px;font-size:19px;cursor:pointer;white-space:nowrap;box-shadow:4px 4px 0 var(--ink);transition:.12s;}
+.actions button:hover{transform:translate(-2px,-2px) rotate(-2deg);box-shadow:6px 6px 0 var(--ink);background:var(--purple);}
+.actions button:active{transform:translate(3px,3px) scale(.96);box-shadow:1px 1px 0 var(--ink);}
+.actions button.active{background:var(--green);}
+.actions button.ultra{background:var(--orange);}
+.chip{background:var(--blue);cursor:default;animation:bob .9s ease-in-out infinite alternate;}
+
+/* GRID */
+.main{position:relative;z-index:1;padding:8px 16px 50px;max-width:1800px;margin:0 auto;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:26px 22px;}
+.grid.shorts{display:flex;flex-direction:column;align-items:center;}
+.card{background:#fff;border:4px solid var(--ink);border-radius:22px;overflow:hidden;cursor:pointer;box-shadow:6px 6px 0 var(--ink);transition:transform .18s,box-shadow .18s;animation:drop .5s backwards;}
+.card:nth-child(4n+1){--c:var(--pink);}.card:nth-child(4n+2){--c:var(--blue);}.card:nth-child(4n+3){--c:var(--green);}.card:nth-child(4n){--c:var(--purple);}
+@keyframes drop{0%{opacity:0;transform:translateY(34px) scale(.88) rotate(-3deg);}}
+.card:hover{transform:translateY(-6px) rotate(-1.5deg);box-shadow:10px 12px 0 var(--ink);}
+.card:nth-child(even):hover{transform:translateY(-6px) rotate(1.5deg);}
+.card:active{transform:scale(.96);}
+.thumb{height:175px;background:var(--ink);border-bottom:4px solid var(--ink);overflow:hidden;position:relative;}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:.25s;}
+.card:hover .thumb img{transform:scale(1.08);}
+.thumb::after{content:"▶";position:absolute;right:10px;bottom:10px;width:40px;height:40px;border-radius:50%;background:var(--c);border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:2px 2px 0 var(--ink);}
+.thumb.noimg{background:var(--c);display:flex;align-items:center;justify-content:center;font-size:70px;}
+.thumb.noimg span{animation:bob .8s ease-in-out infinite alternate;}
+.info{display:flex;gap:12px;padding:12px;}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--c);border:3px solid var(--ink);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.text{flex:1;min-width:0;}
+.title{font-weight:700;font-size:16px;line-height:1.3;max-height:2.6em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.channel{font-size:13px;margin-top:4px;font-weight:700;opacity:.6;}
+.loading{text-align:center;padding:20px;font-size:28px;animation:bob .6s infinite alternate;}
+@keyframes bob{to{transform:translateY(-9px);}}
+.msg{grid-column:1/-1;text-align:center;font-size:22px;font-weight:700;padding:30px;}
+.msg button{margin-top:12px;padding:8px 22px;border:3px solid var(--ink);border-radius:30px;background:var(--green);font-size:18px;font-weight:700;cursor:pointer;box-shadow:4px 4px 0 var(--ink);}
+
+/* SHORTS (iframe sirf tap pe) */
+.short-wrapper{width:100%;max-width:400px;height:82vh;max-height:760px;background:var(--ink);border:5px solid var(--ink);border-radius:30px;overflow:hidden;margin:0 auto 28px;position:relative;box-shadow:8px 8px 0 var(--pink);animation:drop .5s backwards;}
+.short-wrapper:nth-child(even){box-shadow:8px 8px 0 var(--blue);}
+.short-wrapper iframe{width:100%;height:100%;border:0;}
+.poster{position:absolute;inset:0;cursor:pointer;background:var(--purple);display:flex;align-items:center;justify-content:center;}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.playbig{position:relative;width:110px;height:110px;border-radius:50%;background:var(--green);border:5px solid var(--ink);box-shadow:5px 5px 0 var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:40px;animation:throb 1s ease-in-out infinite alternate;}
+.playbig small{font-size:20px;margin-top:-6px;}
+@keyframes throb{to{transform:scale(1.14) rotate(5deg);}}
+.stitle{position:absolute;left:0;right:0;top:0;padding:10px 14px;background:linear-gradient(var(--ink),transparent);color:#fff;font-weight:700;font-size:14px;pointer-events:none;}
+.short-nav{position:absolute;right:10px;bottom:90px;display:flex;flex-direction:column;gap:12px;z-index:5;}
+.short-nav button{width:50px;height:50px;border-radius:50%;border:3px solid var(--ink);background:var(--green);color:var(--ink);font-size:20px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);}
+.short-nav button:last-child{background:var(--blue);}
+.short-nav button:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink);}
+
+/* PLAYER */
+.player-overlay{position:fixed;inset:0;background:rgba(26,26,46,.93);z-index:999;display:flex;justify-content:center;align-items:center;}
+.player-box{width:90%;max-width:1200px;aspect-ratio:16/9;position:relative;border:5px solid var(--ink);border-radius:24px;box-shadow:10px 10px 0 var(--pink);background:#000;animation:pop2 .35s cubic-bezier(.3,1.8,.5,1);}
+@keyframes pop2{0%{transform:scale(.4) rotate(-6deg);opacity:0;}}
+.player-box iframe{width:100%;height:100%;border:0;border-radius:19px;}
+.close-btn{position:absolute;top:-26px;right:-18px;width:48px;height:48px;border-radius:50%;background:var(--pink);color:#fff;border:4px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:.15s;}
+.close-btn:hover{transform:rotate(90deg) scale(1.1);}
+
+/* EXTRAS */
+.pow{position:fixed;z-index:2000;pointer-events:none;font-size:46px;color:#fff;-webkit-text-stroke:3px var(--ink);text-shadow:4px 4px 0 var(--ink);animation:powa .6s ease-out forwards;}
+@keyframes powa{0%{transform:translate(-50%,-50%) scale(.2) rotate(-20deg);opacity:1;}60%{transform:translate(-50%,-90%) scale(1.3) rotate(8deg);opacity:1;}100%{transform:translate(-50%,-130%) scale(1) rotate(0);opacity:0;}}
+.floaty{position:fixed;z-index:0;font-size:34px;opacity:.35;pointer-events:none;animation:flt 9s ease-in-out infinite alternate;}
+@keyframes flt{to{transform:translateY(-40px) rotate(25deg);}}
+@media(max-width:600px){.logo{font-size:24px}.grid{grid-template-columns:1fr}.header{gap:8px;padding:0 10px}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important;}}
+</style>
+</head>
+<body>
+
+<div id="bhatiIntro"><span>BHATI!</span></div>
+<span class="floaty" style="left:4%;top:30%">⭐</span><span class="floaty" style="right:5%;top:50%;animation-delay:-3s">🚀</span><span class="floaty" style="left:12%;top:75%;animation-delay:-5s">🍕</span><span class="floaty" style="right:14%;top:18%;animation-delay:-2s">💥</span>
+
+<div class="header">
+<div class="logo" id="logo">▶ LITETUBE</div>
+<div class="search">
+<input id="searchInput" placeholder="Kuch bhi search kar...">
+<button id="searchBtn" aria-label="Search">🔍</button>
+</div>
+</div>
+<div class="ticker"><span>⚡ KAM NET ZYADA MAZA ⚡ TAP KARO TABHI VIDEO LOAD HOGA ⚡ DATA BACHAO ⚡ KAM NET ZYADA MAZA ⚡ TAP KARO TABHI VIDEO LOAD HOGA ⚡ DATA BACHAO ⚡&nbsp;</span></div>
+
+<div class="actions">
+<button id="videoBtn" class="active">🎬 All</button>
+<button id="shortBtn">⚡ Shorts</button>
+<button id="saveBtn">💾 Data Saver</button>
+<span class="chip" id="meter">📶 ~0 KB</span>
+</div>
+
+<main class="main">
+<div class="grid" id="grid"></div>
+<div id="loadingIndicator" class="loading" style="display:none;">Loading... 🚀</div>
+<div id="sentinel" style="height:2px"></div>
+</main>
+
+<script>
+/* ===== API KEYS (same purani) ===== */
+const API_KEYS=["AIzaSyC9OPfYIz6sX9KaWyUnF59dzFp_Uya6JXw","AIzaSyAM53NgSNnew8hTJ53cDtLg0rxIoo75aN4"];
+
+/* ===== MODES: 0 normal | 1 saver | 2 ultra (zero images) ===== */
+const MODES=[
+ {label:"💾 Data Saver",n:16,thumb:"mqdefault",kb:8},
+ {label:"💾 Saver ON",n:10,thumb:"default",kb:3},
+ {label:"🪫 Ultra Saver",n:20,thumb:null,kb:0}
+];
+const EMOJIS=["😎","🤪","🦄","🐵","🦊","🐸","👾","🍕","🚀","🐼","🔥","🎃"];
+const POWS=["POW!","BAM!","ZAP!","WOW!","BOOM!","YO!"];
+
+let keyIndex=0,query="trending",nextToken="",loading=false,shortsMode=false,reqId=0,usedBytes=0,shortsObs=null;
+let mode=0;
+try{const s=localStorage.getItem("bhati_mode");if(s!==null)mode=+s;else{const c=navigator.connection;if(c&&(c.saveData||/2g/.test(c.effectiveType||"")))mode=1;}}catch(e){}
+
+const $=id=>document.getElementById(id);
+const grid=$("grid"),input=$("searchInput"),searchBtn=$("searchBtn"),saveBtn=$("saveBtn"),videoBtn=$("videoBtn"),shortBtn=$("shortBtn"),loadingIndicator=$("loadingIndicator"),meter=$("meter"),sentinel=$("sentinel");
+
+/* ===== helpers ===== */
+const ta=document.createElement("textarea");
+function dec(s){ta.innerHTML=s||"";return ta.value;}          // YouTube titles ke &amp; &#39; sahi dikhane ke liye (safe)
+function addBytes(b){usedBytes+=b;meter.textContent="📶 ~"+(usedBytes<1048576?Math.round(usedBytes/1024)+" KB":(usedBytes/1048576).toFixed(1)+" MB");}
+function thumbURL(id){return "https://i.ytimg.com/vi/"+id+"/"+MODES[mode].thumb+".jpg";}
+function originParam(){return location.protocol.startsWith("http")?"&origin="+encodeURIComponent(location.origin):"";}
+function embedURL(id,autoplay){return "https://www.youtube.com/embed/"+id+"?autoplay="+autoplay+"&rel=0&playsinline=1&modestbranding=1"+originParam();}
+
+/* ===== cache (1 ghanta, quota full ho to safai) ===== */
+function saveCache(k,d){try{localStorage.setItem(k,JSON.stringify({t:Date.now(),d:d}));}catch(e){try{Object.keys(localStorage).filter(x=>x.startsWith("bhati2_")).forEach(x=>localStorage.removeItem(x));}catch(_){}}}
+function getCache(k){try{const x=JSON.parse(localStorage.getItem(k));if(!x)return null;if(Date.now()-x.t>3600000){localStorage.removeItem(k);return null;}return x.d;}catch(e){return null;}}
+
+/* ===== API: sirf zaroori fields => JSON bahut chhota; sirf embeddable videos ===== */
+function makeURL(){
+ const m=MODES[mode],q=shortsMode?query+" shorts":query;
+ return "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true"+(shortsMode?"&videoDuration=short":"")+
+  "&maxResults="+m.n+"&fields="+encodeURIComponent("nextPageToken,items(id/videoId,snippet(title,channelTitle))")+
+  "&q="+encodeURIComponent(q)+"&key="+API_KEYS[keyIndex]+(nextToken?"&pageToken="+nextToken:"");
+}
+async function fetchWithKeyRotation(url){
+ let attempts=0,lastError=null;
+ while(attempts<API_KEYS.length){
+  try{const res=await fetch(url);const txt=await res.text();const data=JSON.parse(txt);addBytes(txt.length);
+   if(data.error){if(data.error.code===403||data.error.code===400){keyIndex=(keyIndex+1)%API_KEYS.length;url=url.replace(/key=[^&]*/,"key="+API_KEYS[keyIndex]);attempts++;continue;}throw new Error(data.error.message||"API Error");}
+   return data;}
+  catch(e){lastError=e;keyIndex=(keyIndex+1)%API_KEYS.length;url=url.replace(/key=[^&]*/,"key="+API_KEYS[keyIndex]);attempts++;}
+ }
+ throw lastError||new Error("All API keys failed");
+}
+
+/* ===== cards ===== */
+function imgHTML(id,cls){const m=MODES[mode];return m.thumb?`<img loading="lazy" decoding="async" src="${thumbURL(id)}" alt="" onload="addBytes(${m.kb*1024})">`:"";}
+function createCard(item,i){
+ const id=item.id.videoId,emoji=EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+ const div=document.createElement("div");div.className="card";div.style.animationDelay=Math.min(i*.05,.6)+"s";
+ const thumb=MODES[mode].thumb?`<div class="thumb">${imgHTML(id)}</div>`:`<div class="thumb noimg"><span>${emoji}</span></div>`;
+ div.innerHTML=thumb+`<div class="info"><div class="avatar">${emoji}</div><div class="text"><div class="title"></div><div class="channel"></div></div></div>`;
+ div.querySelector(".title").textContent=dec(item.snippet.title);
+ div.querySelector(".channel").textContent=dec(item.snippet.channelTitle);
+ div.onclick=()=>openPlayer(id);
+ return div;
+}
+function openPlayer(id){
+ const box=document.createElement("div");box.className="player-overlay";
+ box.innerHTML=`<div class="player-box"><span class="close-btn">✖</span><iframe src="${embedURL(id,mode?0:1)}" allowfullscreen allow="autoplay; encrypted-media; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
+ const close=()=>box.remove();
+ box.querySelector(".close-btn").onclick=close;
+ box.onclick=e=>{if(e.target===box)close();};
+ document.body.appendChild(box);
+}
+
+/* ===== shorts: iframe sirf tap par, scroll karte hi band ===== */
+function createShort(item,i){
+ const id=item.id.videoId,div=document.createElement("div");
+ div.className="short-wrapper";div.dataset.id=id;div.style.animationDelay=Math.min(i*.05,.5)+"s";
+ div.innerHTML=`<div class="poster">${imgHTML(id)}<div class="playbig">▶<small>TAP!</small></div></div><div class="stitle"></div><div class="short-nav"><button onclick="jumpShort(this,-1)" aria-label="Prev">▲</button><button onclick="jumpShort(this,1)" aria-label="Next">▼</button></div>`;
+ div.querySelector(".stitle").textContent=dec(item.snippet.title);
+ div.querySelector(".poster").onclick=()=>mountShort(div);
+ if(shortsObs)shortsObs.observe(div);
+ return div;
+}
+function unmountShort(box){const f=box.querySelector("iframe");if(f){f.remove();box.querySelector(".poster").style.display="";}}
+function mountShort(box){
+ grid.querySelectorAll(".short-wrapper").forEach(b=>{if(b!==box)unmountShort(b);});
+ if(box.querySelector("iframe"))return;
+ const f=document.createElement("iframe");f.src=embedURL(box.dataset.id,1);
+ f.allow="autoplay; encrypted-media; fullscreen";f.allowFullscreen=true;f.referrerPolicy="strict-origin-when-cross-origin";
+ box.querySelector(".poster").style.display="none";box.prepend(f);
+}
+function jumpShort(btn,dir){
+ const box=btn.closest(".short-wrapper"),t=dir>0?box.nextElementSibling:box.previousElementSibling;
+ if(!t||!t.classList.contains("short-wrapper"))return;
+ t.scrollIntoView({behavior:"smooth",block:"center"});mountShort(t);
+}
+
+/* ===== main loader ===== */
+async function load(clear=true){
+ if(loading&&!clear)return;
+ const my=++reqId;loading=true;loadingIndicator.style.display="block";
+ if(clear){
+  grid.innerHTML="";nextToken="";grid.classList.toggle("shorts",shortsMode);
+  if(shortsObs)shortsObs.disconnect();
+  shortsObs=shortsMode?new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)unmountShort(e.target);}),{threshold:0}):null;
+ }
+ const key="bhati2_"+(shortsMode?"s":"v")+"_"+query+"_"+mode+"_"+(nextToken||"first");
+ try{
+  let res=getCache(key);
+  if(!res){res=await fetchWithKeyRotation(makeURL());saveCache(key,res);}
+  if(my!==reqId)return;
+  const items=(res.items||[]).filter(it=>it.id&&it.id.videoId);
+  items.forEach((it,i)=>grid.appendChild(shortsMode?createShort(it,i):createCard(it,i)));
+  nextToken=res.nextPageToken||"";
+  if(!items.length&&clear)grid.innerHTML='<div class="msg">😅 Kuch nahi mila, dusra search kar!</div>';
+ }catch(e){
+  if(my!==reqId)return;
+  console.log(e);
+  if(!grid.children.length)grid.innerHTML='<div class="msg">😵 Load nahi hua (net ya API limit)<br><button onclick="load(true)">🔄 Retry</button></div>';
+ }
+ if(my===reqId){loading=false;loadingIndicator.style.display="none";sentObs.unobserve(sentinel);sentObs.observe(sentinel);}
+}
+
+/* ===== infinite scroll (scroll event nahi, observer = battery + CPU bachat) ===== */
+const sentObs=new IntersectionObserver(es=>{if(es[0].isIntersecting&&!loading&&nextToken)load(false);},{rootMargin:"700px"});
+sentObs.observe(sentinel);
+
+/* ===== controls ===== */
+function refreshSaveBtn(){saveBtn.textContent=MODES[mode].label;saveBtn.classList.toggle("active",mode===1);saveBtn.classList.toggle("ultra",mode===2);}
+searchBtn.onclick=()=>{query=input.value.trim()||"trending";load(true);};
+input.onkeydown=e=>{if(e.key==="Enter")searchBtn.click();};
+saveBtn.onclick=()=>{mode=(mode+1)%3;try{localStorage.setItem("bhati_mode",mode);}catch(e){}refreshSaveBtn();load(true);};
+shortBtn.onclick=()=>{shortsMode=true;videoBtn.classList.remove("active");shortBtn.classList.add("active");load(true);};
+videoBtn.onclick=()=>{shortsMode=false;videoBtn.classList.add("active");shortBtn.classList.remove("active");load(true);};
+$("logo").onclick=()=>{query="trending";input.value="";videoBtn.click();window.scrollTo({top:0,behavior:"smooth"});};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){const p=document.querySelector(".player-overlay");if(p)p.remove();}});
+
+/* POW! comic effect */
+document.addEventListener("click",e=>{
+ if(!e.target.closest(".card,.actions button,.poster,.short-nav button"))return;
+ const p=document.createElement("div");p.className="pow";p.textContent=POWS[Math.floor(Math.random()*POWS.length)];
+ p.style.left=e.clientX+"px";p.style.top=e.clientY+"px";p.onanimationend=()=>p.remove();document.body.appendChild(p);
+});
+
+setTimeout(()=>{const i=$("bhatiIntro");if(i)i.remove();},1750);
+refreshSaveBtn();
+load(true);
+console.log("BHATI LITETUBE CARTOON READY 🚀");
+</script>
+</body>
+</html>
